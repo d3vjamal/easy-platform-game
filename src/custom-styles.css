@@ -1,0 +1,8 @@
+.MuiTextField-root .MuiOutlinedInput-root {
+    border-radius: 30px;
+    padding-right: 14px;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-radius: 30px;
+}
