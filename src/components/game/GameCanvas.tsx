@@ -25,6 +25,7 @@ const GameCanvas: React.FC = () => {
         incrementScore,
         decrementLives,
         lives,
+        runId,
     } = useGameStore();
 
     const gameRefs = useRef<GameRefs>({
@@ -69,7 +70,7 @@ const GameCanvas: React.FC = () => {
         if (gameState !== 'playing' || !levelData) return;
 
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!canvas || canvas.height === 0) return;
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
@@ -286,12 +287,12 @@ const GameCanvas: React.FC = () => {
                 } else {
                     // Player takes damage
                     decrementLives();
-                    player.invulnerable = true;
-                    setTimeout(() => { player.invulnerable = false; }, 2000);
-                    createParticle(player.x + player.width / 2, player.y + player.height / 2, 'damage', '#f44336');
-
-                    if (lives <= 1) {
+                    if (useGameStore.getState().lives <= 0) {
                         setGameState('gameOver');
+                    } else {
+                        player.invulnerable = true;
+                        setTimeout(() => { player.invulnerable = false; }, 2000);
+                        createParticle(player.x + player.width / 2, player.y + player.height / 2, 'damage', '#f44336');
                     }
                 }
             }
@@ -487,14 +488,14 @@ const GameCanvas: React.FC = () => {
                 player.y < obstacle.y + obstacle.height &&
                 player.y + player.height > obstacle.y) {
                 decrementLives();
-                player.invulnerable = true;
-                setTimeout(() => { player.invulnerable = false; }, 2000);
-                player.x = 50;
-                player.y = 300;
-                createParticle(player.x + player.width / 2, player.y + player.height / 2, 'damage', '#f44336');
-
-                if (lives <= 1) {
+                if (useGameStore.getState().lives <= 0) {
                     setGameState('gameOver');
+                } else {
+                    player.invulnerable = true;
+                    setTimeout(() => { player.invulnerable = false; }, 2000);
+                    player.x = 50;
+                    player.y = 300;
+                    createParticle(player.x + player.width / 2, player.y + player.height / 2, 'damage', '#f44336');
                 }
             }
 
@@ -610,14 +611,14 @@ const GameCanvas: React.FC = () => {
         // Keep player in bounds
         if (player.y > canvas.height) {
             decrementLives();
-            player.x = 50;
-            player.y = 300;
-            player.vx = 0;
-            player.vy = 0;
-            player.hasDoubleJump = false;
-
-            if (lives <= 1) {
+            if (useGameStore.getState().lives <= 0) {
                 setGameState('gameOver');
+            } else {
+                player.x = 50;
+                player.y = 300;
+                player.vx = 0;
+                player.vy = 0;
+                player.hasDoubleJump = false;
             }
         }
 
@@ -688,7 +689,34 @@ const GameCanvas: React.FC = () => {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [updateGame, gameState]);
+    }, [updateGame, gameState, runId]);
+
+    useEffect(() => {
+        // Reset game state when a new run starts
+        gameRefs.current = {
+            player: {
+                x: 50,
+                y: 300,
+                vx: 0,
+                vy: 0,
+                width: PLAYER_SIZE,
+                height: PLAYER_SIZE,
+                grounded: false,
+                jumpCount: 0,
+                hasDoubleJump: false,
+                invulnerable: false,
+            },
+            camera: { x: 0, y: 0 },
+            particles: [],
+            collectedItems: new Set(),
+            defeatedEnemies: new Set(),
+            keys: {},
+            platformStates: new Map(),
+            enemyStates: new Map(),
+            time: 0,
+            jumpPressed: false,
+        };
+    }, [runId]);
 
     return <canvas ref={canvasRef} className="game-canvas" />;
 };

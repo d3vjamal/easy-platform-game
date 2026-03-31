@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useGameStore } from '../../state/gameStore';
 import MainMenu from './MainMenu';
 import ThemeSelector from './ThemeSelector';
@@ -21,10 +21,7 @@ const GameController: React.FC = () => {
         level,
     } = useGameStore();
     const { t } = useTranslation();
-    const [isGenerating, setIsGenerating] = useState(false);
-
     const handleGenerateLevel = async () => {
-        setIsGenerating(true);
         setGameState('generating');
         try {
             const selectedTheme = theme === 'custom' ? customTheme : theme;
@@ -38,7 +35,6 @@ const GameController: React.FC = () => {
             setLevelData(fallbackData);
             setGameState('playing');
         }
-        setIsGenerating(false);
     };
 
     const renderGameState = () => {

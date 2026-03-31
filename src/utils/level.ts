@@ -1,9 +1,6 @@
-import type { TFunction } from 'i18next';
-
 import type { PlatformConfig } from '../types';
 
 export const createFallbackLevel = (theme: string, difficulty: number) => {
-    const complexityMultiplier = Math.min(difficulty / 3, 3);
     const platforms: PlatformConfig[] = [
         { x: 50, y: 400, width: 100, height: 20, type: 'normal' }
     ];
@@ -11,15 +8,12 @@ export const createFallbackLevel = (theme: string, difficulty: number) => {
     // Generate more complex platform layouts
     const platformCount = 15 + difficulty * 3;
     let lastX = 150;
-    let lastY = 400;
-
     for (let i = 1; i < platformCount; i++) {
         const gap = 80 + Math.random() * 60;
         const x = lastX + gap;
         const yVariation = Math.sin(i * 0.3) * 120 + Math.cos(i * 0.7) * 80;
         const y = 350 + yVariation;
 
-        const types = ['normal', 'moving', 'bouncy', 'disappearing', 'ice'];
         const typeChance = Math.random();
         let type = 'normal';
 
@@ -40,7 +34,6 @@ export const createFallbackLevel = (theme: string, difficulty: number) => {
         });
 
         lastX = x;
-        lastY = y;
     }
 
     // Generate enemies with varied types
@@ -101,15 +94,6 @@ export const createFallbackLevel = (theme: string, difficulty: number) => {
 };
 
 export const generateLevel = async (theme: string, level: number) => {
-    const difficulty = level === 1 ? 1 : Math.min(level + 1, 10);
-    const platformCount = level === 1 ? 12 : 15 + level * 3;
-    const enemyCount = level === 1 ? 2 : 3 + Math.floor(level * 1.5);
-    const collectibleCount = level === 1 ? 8 : 10 + level * 2;
-    const obstacleCount = level === 1 ? 0 : 2 + Math.floor(level / 2);
-
-    const prompt = `Generate a platformer level with the theme "${theme}". This is level ${level}, difficulty ${difficulty}/10.
-...`; // The rest of the prompt is omitted for brevity
-
     // This is a placeholder for the actual API call
     return new Promise((resolve) => {
         setTimeout(() => {

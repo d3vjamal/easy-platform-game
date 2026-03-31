@@ -1,4 +1,3 @@
-import React from 'react';
 import type { TFunction } from 'i18next';
 import { Star, Feather, Eye, Moon, Zap, Waves, Flame, Mountain, Gem, Sun, Shield, Heart, Skull, Music, Palette, Cloud, Sparkles } from 'lucide-react';
 import type { Theme } from '../types';

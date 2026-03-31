@@ -10,6 +10,7 @@ interface GameStore {
     theme: string;
     customTheme: string;
     levelData: any; // Replace with a proper type later
+    runId: number;
     setGameState: (state: GameState) => void;
     nextLevel: () => void;
     retryLevel: () => void;
@@ -29,10 +30,11 @@ export const useGameStore = create<GameStore>((set) => ({
     theme: '',
     customTheme: '',
     levelData: null,
+    runId: 0,
     setGameState: (gameState) => set({ gameState }),
     nextLevel: () => set((state) => ({ level: state.level + 1, gameState: 'themeSelect' })),
-    retryLevel: () => set({ lives: 3, gameState: 'playing' }),
-    resetGame: () => set({ gameState: 'menu', level: 1, score: 0, lives: 3 }),
+    retryLevel: () => set((state) => ({ lives: 3, gameState: 'playing', runId: state.runId + 1 })),
+    resetGame: () => set((state) => ({ gameState: 'menu', level: 1, score: 0, lives: 3, runId: state.runId + 1 })),
     setTheme: (theme) => set({ theme }),
     setCustomTheme: (customTheme) => set({ customTheme }),
     setLevelData: (levelData) => set({ levelData }),
