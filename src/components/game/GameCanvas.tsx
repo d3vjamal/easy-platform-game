@@ -57,6 +57,8 @@ const GameCanvas: React.FC = () => {
 
 
 
+    // added new comments 
+
 
     const createParticle = (x: number, y: number, type: string, color: string | null = null) => {
         const particle: Particle = {
