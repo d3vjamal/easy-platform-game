@@ -52,6 +52,12 @@ const GameCanvas: React.FC = () => {
         jumpPressed: false,
     });
 
+
+    // this is the game loop testting a
+
+
+
+
     const createParticle = (x: number, y: number, type: string, color: string | null = null) => {
         const particle: Particle = {
             x,
