@@ -53,11 +53,8 @@ const GameCanvas: React.FC = () => {
     });
 
 
-    // this is the game loop testting a
-    // comments added to test the commit history and branching
+    // function to create particles with different types and colorsdfsd
 
-
-    // added new comments 
 
 
     const createParticle = (x: number, y: number, type: string, color: string | null = null) => {
